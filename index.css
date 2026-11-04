@@ -1,0 +1,88 @@
+/*
+ * skeleton — stand-ins for content that has not arrived yet. CSS only.
+ *
+ *   <article aria-busy="true">
+ *       <div data-pg-skeleton style="aspect-ratio: 16/9"></div>      a box
+ *       <div data-pg-skeleton="circle" style="width: 2.5rem"></div>  a circle
+ *       <div data-pg-skeleton="text"></div>                          lines
+ *   </article>
+ *
+ * Variables, set anywhere above (media queries welcome):
+ *   --pg-skeleton-color    the grey. Default the image package's: a half-
+ *                          tone grey at 15%, for light and dark themes alike
+ *   --pg-skeleton-shine    the shimmer's band, laid over the grey. Default
+ *                          the same half-tone grey: a shade darker on a
+ *                          light page, lighter on a dark one
+ *   --pg-skeleton-radius   corners of a box. 0.5rem
+ *   --pg-skeleton-lines    how many lines a "text" draws. 1
+ *   --pg-skeleton-line     a line's height. 0.875em
+ *   --pg-skeleton-gap      the gap between lines. 0.625em
+ *   --pg-skeleton-last     the last line's width — text rarely fills it. 60%
+ *
+ * Everything sits at zero weight (:where), so a class of yours wins.
+ */
+
+/* Registered, so calc() can multiply lines by a length. */
+@property --pg-skeleton-lines {
+    syntax: "<integer>";
+    inherits: true;
+    initial-value: 1;
+}
+
+:where([data-pg-skeleton]) {
+    display: block;
+    min-height: 1em;
+    border-radius: var(--pg-skeleton-radius, 0.5rem);
+    background-color: var(--pg-skeleton-color, rgb(127 127 127 / 0.15));
+    /* The shimmer: a soft band of light swept across, left to right. */
+    background-image: linear-gradient(
+        100deg,
+        transparent 30%,
+        var(--pg-skeleton-shine, rgb(127 127 127 / 0.15)) 50%,
+        transparent 70%
+    );
+    background-size: 200% 100%;
+    background-position: 150% 0;
+    background-repeat: no-repeat;
+}
+
+:where([data-pg-skeleton="circle"]) {
+    /* In a flex row: neither squeezed nor stretched out of round. */
+    flex: none;
+    align-self: start;
+    height: auto;
+    width: 2.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+/* Lines: one block, cut into lines by a mask — the colour and the shimmer
+   show only where the lines are, and the last one stops short. */
+:where([data-pg-skeleton="text"]) {
+    min-height: 0;
+    height: calc(
+        var(--pg-skeleton-lines) * var(--pg-skeleton-line, 0.875em) + (var(--pg-skeleton-lines) - 1) *
+            var(--pg-skeleton-gap, 0.625em)
+    );
+    border-radius: 0;
+    mask:
+        repeating-linear-gradient(
+                #000 0 var(--pg-skeleton-line, 0.875em),
+                transparent 0 calc(var(--pg-skeleton-line, 0.875em) + var(--pg-skeleton-gap, 0.625em))
+            )
+            top left / 100% calc(100% - var(--pg-skeleton-line, 0.875em)) no-repeat,
+        linear-gradient(#000 0 0) bottom left / var(--pg-skeleton-last, 60%) var(--pg-skeleton-line, 0.875em)
+            no-repeat;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :where([data-pg-skeleton]) {
+        animation: pg-skeleton-shine 1.6s ease-in-out infinite;
+    }
+}
+
+@keyframes pg-skeleton-shine {
+    to {
+        background-position: -50% 0;
+    }
+}

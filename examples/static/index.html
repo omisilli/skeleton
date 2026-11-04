@@ -1,0 +1,331 @@
+<!doctype html>
+<!-- Open by double-clicking: the CSS loads from jsDelivr, not from ../..
+     Pinned to this release, so the page and the code always match.
+     The image package is here too: it takes over once the cards arrive. -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>skeleton — example</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/skeleton@v1.0.0/index.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/image@v2.0.0/index.css" />
+        <style>
+            :root {
+                --bg: #f6f6f4;
+                --surface: #ffffff;
+                --fg: #18181b;
+                --muted: #6b6b72;
+                --line: #e4e4e0;
+                --hover: #f0f0ec;
+                color-scheme: light dark;
+            }
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --bg: #111113;
+                    --surface: #1b1b1f;
+                    --fg: #ededef;
+                    --muted: #9a9aa3;
+                    --line: #2c2c31;
+                    --hover: #26262b;
+                }
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+            }
+            body {
+                font:
+                    16px/1.6 system-ui,
+                    -apple-system,
+                    "Segoe UI",
+                    Roboto,
+                    sans-serif;
+                color: var(--fg);
+                background: var(--bg);
+            }
+            code {
+                font:
+                    0.85em/1.4 ui-monospace,
+                    SFMono-Regular,
+                    Menlo,
+                    monospace;
+                background: var(--hover);
+                padding: 0.15em 0.4em;
+                border-radius: 0.35em;
+            }
+            img {
+                display: block;
+                color: transparent;
+            }
+
+            main {
+                max-width: 64rem;
+                margin: 0 auto;
+                padding: 3rem 1rem 6rem;
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 3.5rem;
+            }
+            h1 {
+                font-size: 1.75rem;
+                line-height: 1.2;
+            }
+            h2 {
+                font-size: 1.1rem;
+                margin-bottom: 0.4rem;
+            }
+            header > p,
+            section > p {
+                color: var(--muted);
+                max-width: 44rem;
+            }
+            section > p + p {
+                margin-top: 0.5rem;
+            }
+            button {
+                font: inherit;
+                color: inherit;
+                cursor: pointer;
+                padding: 0.5rem 0.9rem;
+                border: 1px solid var(--line);
+                border-radius: 0.6rem;
+                background: var(--surface);
+                margin-top: 1.25rem;
+            }
+
+            /* --- The cards: the same layout, stand-in or real --- */
+            .cards {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+                gap: 2rem 1rem;
+                margin-top: 1.25rem;
+            }
+            .card {
+                display: grid;
+                gap: 0.75rem;
+            }
+            .cover {
+                aspect-ratio: 16 / 9;
+                overflow: hidden;
+                border-radius: 0.6rem;
+            }
+            .cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .meta {
+                display: flex;
+                gap: 0.75rem;
+            }
+            .lines {
+                flex: 1;
+                display: grid;
+                gap: 0.4rem;
+                align-content: start;
+                padding-top: 0.15rem;
+            }
+            .avatar {
+                flex: none;
+                width: 2.25rem;
+                height: 2.25rem;
+                display: grid;
+                place-items: center;
+                border-radius: 50%;
+                background: var(--hover);
+                font-size: 0.85rem;
+            }
+            .title {
+                font-size: 0.9rem;
+                font-weight: 600;
+                line-height: 1.35;
+            }
+            .channel {
+                font-size: 0.8rem;
+                color: var(--muted);
+            }
+
+            /* --- The shapes gallery --- */
+            .shapes {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+                gap: 1.5rem 1rem;
+                margin-top: 1.25rem;
+            }
+            figure {
+                display: grid;
+                gap: 0.6rem;
+                align-content: start;
+            }
+            figcaption {
+                font-size: 0.8rem;
+                color: var(--muted);
+            }
+
+            table {
+                border-collapse: collapse;
+                margin-top: 1.25rem;
+                font-size: 0.9rem;
+                width: 100%;
+            }
+            th,
+            td {
+                text-align: left;
+                vertical-align: top;
+                padding: 0.5rem 0.75rem 0.5rem 0;
+                border-bottom: 1px solid var(--line);
+            }
+            th {
+                font-weight: 600;
+            }
+            td {
+                color: var(--muted);
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <header>
+                <h1>skeleton</h1>
+                <p>
+                    Grey boxes, circles and lines that stand in for content that has not arrived
+                    yet — the way YouTube shows its page before the videos load. CSS only: what
+                    decides when they go is your code (or Next's <code>loading.tsx</code>).
+                </p>
+            </header>
+
+            <section>
+                <h2>Before the data, then the cards</h2>
+                <p>
+                    The cards take 1.5 seconds to "arrive"; until then, their skeleton — the same
+                    layout, drawn in grey. Then each cover's image loads under the
+                    <code>image</code> package, whose grey is the same, so the hand-over is not
+                    seen.
+                </p>
+                <button type="button" id="again">Load again</button>
+                <div class="cards" id="cards" aria-busy="true" aria-label="Loading videos"></div>
+            </section>
+
+            <section>
+                <h2>Shapes</h2>
+                <p>
+                    A box takes the size you give it. A circle takes a width. Text takes a line
+                    count, and its last line stops short, as text does.
+                </p>
+                <div class="shapes">
+                    <figure>
+                        <div data-pg-skeleton style="aspect-ratio: 16 / 9"></div>
+                        <figcaption><code>data-pg-skeleton</code> · a box, 16/9</figcaption>
+                    </figure>
+                    <figure>
+                        <div data-pg-skeleton="circle" style="width: 4rem"></div>
+                        <figcaption><code>="circle"</code> · width 4rem</figcaption>
+                    </figure>
+                    <figure>
+                        <div data-pg-skeleton="text" style="--pg-skeleton-lines: 3"></div>
+                        <figcaption><code>="text"</code> · <code>--pg-skeleton-lines: 3</code></figcaption>
+                    </figure>
+                    <figure>
+                        <div data-pg-skeleton="text" style="font-size: 1.75rem; --pg-skeleton-last: 100%"></div>
+                        <figcaption>A heading: a bigger font, one full line</figcaption>
+                    </figure>
+                    <figure>
+                        <div data-pg-skeleton style="height: 2.5rem; width: 8rem; --pg-skeleton-radius: 999px"></div>
+                        <figcaption>A pill-shaped button: <code>--pg-skeleton-radius</code></figcaption>
+                    </figure>
+                    <figure>
+                        <div data-pg-skeleton style="height: 4rem; --pg-skeleton-color: rgb(47 91 234 / 0.15)"></div>
+                        <figcaption>Your own grey: <code>--pg-skeleton-color</code></figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section>
+                <h2>skeleton or image</h2>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>skeleton</th>
+                        <th>image</th>
+                    </tr>
+                    <tr>
+                        <th>Known yet</th>
+                        <td>Nothing: which picture, which title, how many</td>
+                        <td>The picture's address — only the file is on its way</td>
+                    </tr>
+                    <tr>
+                        <th>Stands in for</th>
+                        <td>The whole card: cover, avatar, title lines</td>
+                        <td>One picture</td>
+                    </tr>
+                    <tr>
+                        <th>Goes when</th>
+                        <td>Your data arrives and the real markup replaces it</td>
+                        <td>The file has loaded</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 1rem">
+                    Each works alone. Together, one after the other, they cover a card from the
+                    first moment to the last pixel.
+                </p>
+            </section>
+        </main>
+
+        <script type="module">
+            import { initImage } from "https://cdn.jsdelivr.net/gh/omisilli/image@v2.0.0/dist/index.js";
+
+            initImage();
+
+            const videos = [
+                ["horse-01.jpg", "A white horse at full gallop through the evening light", "Open Fields"],
+                ["horse-02.jpg", "Meeting a curious bay under a cloudy summer sky", "Stable Notes"],
+                ["horse-03.jpg", "High pastures: a chestnut against the snow line", "Open Fields"],
+                ["horse-04.jpg", "First weeks of a foal, from wobble to trot", "Young Ones"],
+                ["horse-05.jpg", "A black foal in spring grass", "Young Ones"],
+                ["horse-06.jpg", "Sunset on the beach, saddled and waiting", "Shorelines"],
+            ];
+            const cards = document.getElementById("cards");
+
+            // The stand-in: the card's layout, every part a skeleton.
+            const skeleton = `
+                <div class="card">
+                    <div class="cover" data-pg-skeleton></div>
+                    <div class="meta">
+                        <div data-pg-skeleton="circle" style="width: 2.25rem"></div>
+                        <div class="lines">
+                            <div data-pg-skeleton="text" class="title" style="--pg-skeleton-lines: 2"></div>
+                            <div data-pg-skeleton="text" class="channel" style="--pg-skeleton-last: 40%"></div>
+                        </div>
+                    </div>
+                </div>`;
+
+            const card = ([file, title, channel]) => `
+                <article class="card">
+                    <div class="cover" data-pg-image-frame>
+                        <img data-pg-image src="images/${file}" width="800" height="533" alt="" />
+                    </div>
+                    <div class="meta">
+                        <span class="avatar">${channel[0]}</span>
+                        <div class="lines">
+                            <h3 class="title">${title}</h3>
+                            <p class="channel">${channel}</p>
+                        </div>
+                    </div>
+                </article>`;
+
+            function load() {
+                cards.setAttribute("aria-busy", "true");
+                cards.innerHTML = skeleton.repeat(videos.length);
+                // Stands in for a fetch.
+                setTimeout(() => {
+                    cards.innerHTML = videos.map(card).join("");
+                    cards.setAttribute("aria-busy", "false");
+                }, 1500);
+            }
+
+            document.getElementById("again").addEventListener("click", load);
+            load();
+        </script>
+    </body>
+</html>

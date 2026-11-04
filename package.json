@@ -1,0 +1,15 @@
+{
+    "name": "@plusguard/skeleton",
+    "version": "1.0.0",
+    "description": "Loading placeholders from HTML attributes: grey boxes, text lines and circles that stand in for content not yet loaded, with a soft shimmer. CSS only, for Next's loading.tsx and static sites alike. Zero dependencies.",
+    "style": "./index.css",
+    "exports": {
+        "./index.css": "./index.css"
+    },
+    "files": ["index.css", "README.md", "LICENSE"],
+    "sideEffects": ["*.css"],
+    "license": "MIT",
+    "author": "PlusGuard",
+    "repository": { "type": "git", "url": "git+https://github.com/omisilli/skeleton.git" },
+    "keywords": ["skeleton", "loading", "placeholder", "shimmer", "suspense", "data-attributes", "css"]
+}
