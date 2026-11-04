@@ -9,12 +9,12 @@ stylesheet, no JavaScript, no dependencies; the same markup in a Next
 <article aria-busy="true">
     <div data-pg-skeleton style="aspect-ratio: 16 / 9"></div>
     <div data-pg-skeleton="circle" style="width: 2.5rem"></div>
-    <div data-pg-skeleton="text" style="--pg-skeleton-lines: 2"></div>
+    <div data-pg-skeleton="text" class="title" style="--pg-skeleton-lines: 2"></div>
 </article>
 ```
 
 ```sh
-npm install github:omisilli/skeleton#v1.0.0
+npm install github:omisilli/skeleton#v2.0.0
 ```
 
 ```ts
@@ -30,10 +30,10 @@ Or from CSS, which lets you pick the cascade layer:
 ### Without a build step
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/skeleton@v1.0.0/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/skeleton@v2.0.0/index.css" />
 ```
 
-Pin the version (`@v1.0.0`) on a live site. A pinned URL never changes;
+Pin the version (`@v2.0.0`) on a live site. A pinned URL never changes;
 `@1` follows the newest 1.x release.
 
 ## skeleton or image
@@ -71,7 +71,34 @@ results, "load more", data from an API.
 | -------------------------- | ------------------------------------------------------------------ |
 | `data-pg-skeleton`         | A box. Give it a size: `aspect-ratio`, a `height`, or let a grid stretch it. At least `1em` tall |
 | `data-pg-skeleton="circle"` | A circle, `2.5rem` wide unless you set a `width`. Stays round in a flex row |
-| `data-pg-skeleton="text"`  | Lines of text, sized in `em` — set its `font-size` to the text it stands in for. The last line stops short |
+| `data-pg-skeleton="text"`  | Lines of text, exactly as tall as the real text: lines × its line-height. The last line stops short |
+
+### Nothing moves when the content arrives
+
+A `text` is `--pg-skeleton-lines` × `1lh` tall — the line-height of its own
+font. Give it the same class as the text it stands in for, and the real
+text takes the same room to the pixel:
+
+```html
+<!-- Waiting -->
+<div data-pg-skeleton="text" class="title" style="--pg-skeleton-lines: 2"></div>
+
+<!-- Arrived: the same class, the same height -->
+<h3 class="title">A white horse at full gallop</h3>
+```
+
+Real text can still run to fewer or more lines than the skeleton drew. Fix
+the real one to the same count, as YouTube does with its titles:
+
+```css
+article .title {
+    line-clamp: 2; /* with -webkit-line-clamp, display: -webkit-box */
+    min-height: 2lh; /* a one-line title keeps the room of two */
+}
+```
+
+Give boxes and circles the size of what replaces them — the same
+`aspect-ratio`, the same width — and the card as a whole does not move.
 
 ```html
 <!-- A heading: bigger font, one full line -->
@@ -92,9 +119,11 @@ queries, or with Tailwind's `[--…]`.
 | `--pg-skeleton-shine`  | `rgb(127 127 127 / 0.15)` | The shimmer's band over the grey: darker on a light page, lighter on a dark one |
 | `--pg-skeleton-radius` | `0.5rem`                  | Corners of a box                                          |
 | `--pg-skeleton-lines`  | `1`                       | How many lines a `text` draws                             |
-| `--pg-skeleton-line`   | `0.875em`                 | A line's height                                           |
-| `--pg-skeleton-gap`    | `0.625em`                 | The gap between lines                                     |
+| `--pg-skeleton-line`   | `0.6lh`                   | A bar's thickness, centred in each line                   |
 | `--pg-skeleton-last`   | `60%`                     | The last line's width                                     |
+
+The space between bars is not set: it is whatever the line-height leaves,
+as between real lines.
 
 Every rule is at zero weight (`:where`), so a class of yours wins — but a
 `background` shorthand of yours also removes the shimmer; set
@@ -141,6 +170,13 @@ list.setAttribute("aria-busy", "false");
 
 See [`examples/static/index.html`](examples/static/index.html) — the cards,
 every shape, and the hand-over to image.
+
+## From 1.x
+
+`--pg-skeleton-gap` is gone, and `--pg-skeleton-line` is now a bar's
+thickness inside each line rather than the line's height: a `text` takes
+its height from its line-height, so it matches the text it stands in for.
+Give the skeleton the same class as that text.
 
 ## Screen readers
 

@@ -1,6 +1,6 @@
 {
     "name": "@plusguard/skeleton",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Loading placeholders from HTML attributes: grey boxes, text lines and circles that stand in for content not yet loaded, with a soft shimmer. CSS only, for Next's loading.tsx and static sites alike. Zero dependencies.",
     "style": "./index.css",
     "exports": {

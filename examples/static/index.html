@@ -7,7 +7,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>skeleton — example</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/skeleton@v1.0.0/index.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/skeleton@v2.0.0/index.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/image@v2.0.0/index.css" />
         <style>
             :root {
@@ -145,6 +145,16 @@
                 font-size: 0.8rem;
                 color: var(--muted);
             }
+            /* Two lines, always, as YouTube does: a one-line title keeps
+               the room its skeleton took, and a long one stops at two. */
+            article .title {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                overflow: hidden;
+                min-height: 2lh;
+            }
 
             /* --- The shapes gallery --- */
             .shapes {
@@ -199,7 +209,7 @@
                 <h2>Before the data, then the cards</h2>
                 <p>
                     The cards take 1.5 seconds to "arrive"; until then, their skeleton — the same
-                    layout, drawn in grey. Then each cover's image loads under the
+                    layout, drawn in grey, the same height to the pixel, so nothing below moves. Then each cover's image loads under the
                     <code>image</code> package, whose grey is the same, so the hand-over is not
                     seen.
                 </p>
@@ -211,7 +221,8 @@
                 <h2>Shapes</h2>
                 <p>
                     A box takes the size you give it. A circle takes a width. Text takes a line
-                    count, and its last line stops short, as text does.
+                    count and the font of the text it stands in for — it is exactly as tall —
+                    and its last line stops short, as text does.
                 </p>
                 <div class="shapes">
                     <figure>

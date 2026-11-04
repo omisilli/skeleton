@@ -4,7 +4,7 @@
  *   <article aria-busy="true">
  *       <div data-pg-skeleton style="aspect-ratio: 16/9"></div>      a box
  *       <div data-pg-skeleton="circle" style="width: 2.5rem"></div>  a circle
- *       <div data-pg-skeleton="text"></div>                          lines
+ *       <div data-pg-skeleton="text" class="title"></div>            lines
  *   </article>
  *
  * Variables, set anywhere above (media queries welcome):
@@ -15,9 +15,11 @@
  *                          light page, lighter on a dark one
  *   --pg-skeleton-radius   corners of a box. 0.5rem
  *   --pg-skeleton-lines    how many lines a "text" draws. 1
- *   --pg-skeleton-line     a line's height. 0.875em
- *   --pg-skeleton-gap      the gap between lines. 0.625em
+ *   --pg-skeleton-line     a bar's thickness, inside each line. 0.6lh
  *   --pg-skeleton-last     the last line's width — text rarely fills it. 60%
+ *
+ * A "text" is as tall as its lines of real text: give it the same font
+ * size and line-height (the same class) as the text it stands in for.
  *
  * Everything sits at zero weight (:where), so a class of yours wins.
  */
@@ -56,23 +58,23 @@
     border-radius: 50%;
 }
 
-/* Lines: one block, cut into lines by a mask — the colour and the shimmer
-   show only where the lines are, and the last one stops short. */
+/* Lines: exactly as tall as the text they stand in for — lines × the
+   line-height (1lh) — so nothing moves when the text arrives. One block,
+   cut into bars by a mask, each bar centred in its own line box; the
+   colour and the shimmer show only there, and the last bar stops short. */
 :where([data-pg-skeleton="text"]) {
     min-height: 0;
-    height: calc(
-        var(--pg-skeleton-lines) * var(--pg-skeleton-line, 0.875em) + (var(--pg-skeleton-lines) - 1) *
-            var(--pg-skeleton-gap, 0.625em)
-    );
+    height: calc(var(--pg-skeleton-lines) * 1lh);
     border-radius: 0;
     mask:
         repeating-linear-gradient(
-                #000 0 var(--pg-skeleton-line, 0.875em),
-                transparent 0 calc(var(--pg-skeleton-line, 0.875em) + var(--pg-skeleton-gap, 0.625em))
+                transparent 0 calc((1lh - var(--pg-skeleton-line, 0.6lh)) / 2),
+                #000 0 calc((1lh + var(--pg-skeleton-line, 0.6lh)) / 2),
+                transparent 0 1lh
             )
-            top left / 100% calc(100% - var(--pg-skeleton-line, 0.875em)) no-repeat,
-        linear-gradient(#000 0 0) bottom left / var(--pg-skeleton-last, 60%) var(--pg-skeleton-line, 0.875em)
-            no-repeat;
+            left 0 top 0 / 100% calc(100% - 1lh) no-repeat,
+        linear-gradient(#000 0 0) left 0 bottom calc((1lh - var(--pg-skeleton-line, 0.6lh)) / 2) /
+            var(--pg-skeleton-last, 60%) var(--pg-skeleton-line, 0.6lh) no-repeat;
 }
 
 @media (prefers-reduced-motion: no-preference) {

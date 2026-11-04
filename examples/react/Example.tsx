@@ -16,6 +16,9 @@ import "@plusguard/skeleton/index.css";
  *                             }
  */
 
+const title = "text-sm leading-snug";
+const channel = "text-xs";
+
 /* The stand-in: the card's own layout, every part a skeleton. */
 export function VideoGridSkeleton() {
     return (
@@ -25,9 +28,11 @@ export function VideoGridSkeleton() {
                     <div data-pg-skeleton className="aspect-video" />
                     <div className="flex gap-3">
                         <div data-pg-skeleton="circle" className="w-9" />
-                        <div className="flex flex-1 flex-col gap-2 pt-1">
-                            <div data-pg-skeleton="text" className="text-sm [--pg-skeleton-lines:2]" />
-                            <div data-pg-skeleton="text" className="text-xs [--pg-skeleton-last:40%]" />
+                        {/* The same classes as the real title and channel: the
+                            same font and line-height, so the same height. */}
+                        <div className="flex flex-1 flex-col gap-1">
+                            <div data-pg-skeleton="text" className={`${title} [--pg-skeleton-lines:2]`} />
+                            <div data-pg-skeleton="text" className={`${channel} [--pg-skeleton-last:40%]`} />
                         </div>
                     </div>
                 </div>
@@ -54,8 +59,17 @@ async function VideoGrid() {
                     <div data-pg-image-frame className="aspect-video overflow-hidden rounded-lg">
                         <img data-pg-image src={v.cover} alt="" className="h-full w-full object-cover" />
                     </div>
-                    <h3 className="text-sm font-semibold">{v.title}</h3>
-                    <p className="text-xs text-neutral-500">{v.channel}</p>
+                    <div className="flex gap-3">
+                        <span className="grid size-9 flex-none place-items-center rounded-full bg-neutral-100 text-sm">
+                            {v.channel[0]}
+                        </span>
+                        <div className="flex flex-1 flex-col gap-1">
+                            {/* Two lines, always: a one-line title keeps the room
+                                its skeleton took. */}
+                            <h3 className={`${title} line-clamp-2 min-h-[2lh] font-semibold`}>{v.title}</h3>
+                            <p className={`${channel} text-neutral-500`}>{v.channel}</p>
+                        </div>
+                    </div>
                 </article>
             ))}
         </div>
