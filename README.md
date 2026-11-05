@@ -65,6 +65,28 @@ nothing to wait for and need no skeleton; their images still use `image`.
 A skeleton is for content fetched after the page: a list, search
 results, "load more", data from an API.
 
+## With loading-progress
+
+[loading-progress](https://github.com/omisilli/loading-progress) is the
+thin bar along the top of the page; skeleton is the grey cards below it.
+Together they are YouTube's page while it loads: the bar creeps, the cards
+stand in — and the bar fills only once the cards have gone.
+
+The link between them is `aria-busy="true"`, which goes on a skeleton's
+part anyway, for screen readers (see [Screen readers](#screen-readers)):
+the bar waits for nothing on the page to be `aria-busy` before it fills.
+Nothing else connects them — neither package knows the other, and each
+works alone.
+
+```html
+<div data-pg-loading-progress data-pg-loading-progress-state="loading"></div>
+
+<section aria-busy="true" aria-label="Loading videos">
+    <div data-pg-skeleton style="aspect-ratio: 16 / 9"></div>
+    …
+</section>
+```
+
 ## Shapes
 
 | Attribute                  | Draws                                                              |
