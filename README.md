@@ -14,7 +14,7 @@ stylesheet, no JavaScript, no dependencies; the same markup in a Next
 ```
 
 ```sh
-npm install github:omisilli/skeleton#v2.0.0
+npm install @plusguard/skeleton
 ```
 
 ```ts
@@ -30,10 +30,10 @@ Or from CSS, which lets you pick the cascade layer:
 ### Without a build step
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/omisilli/skeleton@v2.0.0/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@plusguard/skeleton@2.0.1/index.css" />
 ```
 
-Pin the version (`@v2.0.0`) on a live site. A pinned URL never changes;
+Pin the version (`@2.0.1`) on a live site. A pinned URL never changes;
 `@1` follows the newest 1.x release.
 
 ## skeleton or image
